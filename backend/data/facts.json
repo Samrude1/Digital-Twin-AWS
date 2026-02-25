@@ -1,0 +1,96 @@
+{
+    "full_name": "Sami Rautanen",
+    "name": "Sami",
+    "current_role": "AI Engineer & Technical Designer",
+    "location": "Finland",
+    "website": "https://www.samirautanen.fi",
+    "email": "samrude1@outlook.com",
+    "linkedin": "www.linkedin.com/in/sami-rautanen-022095325",
+    "github": "github.com/Samrude1",
+    "specialties": [
+        "Multi-agent AI systems & orchestration",
+        "Production agentic platforms (CrewAI, LangGraph, AutoGen, MCP)",
+        "Full-stack web development (Next.js, React, TypeScript, Node.js)",
+        "Game development (Unity, C#)",
+        "Technical design & 3D modeling / CAD"
+    ],
+    "years_experience": 3,
+    "education": [
+        {
+            "degree": "Technical Design",
+            "institution": "Hyria Ammattiopisto",
+            "year": "2020"
+        },
+        {
+            "degree": "C# Systems Development & Full-Stack Apps",
+            "institution": "Taitotalo Helsinki",
+            "year": "2023"
+        }
+    ],
+    "companies": [
+        {
+            "name": "Murata Finland",
+            "role": "Specialist — MEMS Technology (Digital/Industrial Precision)",
+            "type": "Employment"
+        },
+        {
+            "name": "MyProductions",
+            "role": "Founder — Digital products for the web",
+            "type": "Founded"
+        },
+        {
+            "name": "CodeRumble",
+            "role": "Co-founder — Educational content for developers",
+            "type": "Co-founded"
+        }
+    ],
+    "key_projects": [
+        {
+            "name": "Agentic Business Intelligence",
+            "description": "Enterprise-grade multi-agent orchestration platform (OpenAI Agents SDK / Gemini 2.0 Flash). 6-agent Sales Intelligence Team + 3-agent Deep Research Team. Custom tool integration, memory management, real-time process streaming."
+        },
+        {
+            "name": "Autonomous Career Digital Twin",
+            "description": "Autonomous AI agent deployed on portfolio. Handles visitor inquiries, manages email workflows, sends real-time notifications. Production deployment with FastAPI on Render."
+        },
+        {
+            "name": "SkyGuide B737-800 Performance Computer",
+            "description": "Professional flight performance calculator with live METAR, AI co-pilot (Gemini), and SimBrief import. Computes V-speeds, N1 thrust, VREF/VAPP, TOD."
+        },
+        {
+            "name": "NordicCode Bootcamp Finder",
+            "description": "Full-stack REST API platform for discovering coding bootcamps. User authentication, live backend, reviews. Node.js + React."
+        },
+        {
+            "name": "Yes Man Chess Terminal",
+            "description": "Retro chess AI with personality-driven commentary (Gemini). Stockfish engine, 4 difficulty levels, dynamic mood system, authentic CRT effects."
+        },
+        {
+            "name": "TreeniTrack Pro",
+            "description": "Intelligent workout tracking app with integrated AI coach, visual analytics, and personalized training recommendations."
+        },
+        {
+            "name": "Poker Analytics Engine",
+            "description": "6-max No-Limit Hold'em training simulator. Position-based AI opponents, live HUD with VPIP/PFR/3-Bet stats, aggression factor tracking."
+        }
+    ],
+    "ai_frameworks": [
+        "CrewAI",
+        "LangGraph",
+        "AutoGen",
+        "MCP Servers",
+        "OpenAI Agents SDK",
+        "Gemini 2.0"
+    ],
+    "languages_tools": [
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "C#",
+        "React",
+        "Next.js",
+        "FastAPI",
+        "Node.js",
+        "Tailwind CSS"
+    ]
+}
