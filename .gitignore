@@ -1,0 +1,33 @@
+# Environment variables - NEVER commit these
+.env
+.env.*
+!.env.example
+
+# Docs (internal course material)
+docs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Lambda packaging
+lambda-package/
+lambda-deployment.zip
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+npm-debug.log*
+
+# Memory (local conversation files)
+memory/
+
+# OS
+.DS_Store
+Thumbs.db
