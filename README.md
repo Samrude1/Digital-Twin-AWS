@@ -10,7 +10,7 @@
 
 This project builds and deploys a production-grade **AI Digital Twin** — a conversational agent that represents a person on their website, answering questions about their background, skills, and projects.
 
-The week-long build progresses from a simple local prototype to a fully automated, multi-environment AWS deployment with CI/CD pipelines.
+The stack progresses from a simple local prototype to a fully automated, multi-environment AWS deployment with CI/CD pipelines.
 
 ---
 
@@ -78,7 +78,7 @@ Lambda Function (FastAPI Backend via Mangum)
 ## Project Structure
 
 ```
-week2/
+digital-twin/
 ├── backend/
 │   ├── server.py              # FastAPI app (OpenAI / Bedrock versions)
 │   ├── context.py             # Dynamic system prompt builder
@@ -86,7 +86,7 @@ week2/
 │   ├── lambda_handler.py      # Mangum Lambda entry point
 │   ├── deploy.py              # Lambda packaging script (Docker-based)
 │   ├── requirements.txt       # Python dependencies
-│   ├── me.txt                 # Legacy personality prompt (Day 1)
+│   ├── me.txt                 # Simple personality prompt (local dev)
 │   └── data/
 │       ├── facts.json         # Structured personal data
 │       ├── summary.txt        # Personal narrative
@@ -118,15 +118,15 @@ week2/
 
 ---
 
-## Day-by-Day Build
+## Build Phases
 
-| Day | Focus | Key Outcome |
+| Phase | Focus | Key Outcome |
 |---|---|---|
-| **Day 1** | Local prototype | FastAPI + Next.js + file-based memory |
-| **Day 2** | AWS deployment | Lambda, API Gateway, S3, CloudFront |
-| **Day 3** | AWS Bedrock | Replace OpenAI with Amazon Nova models |
-| **Day 4** | Terraform IaC | Dev / Test / Prod environments automated |
-| **Day 5** | GitHub Actions CI/CD | Push-to-deploy + OIDC authentication |
+| **1** | Local prototype | FastAPI + Next.js + file-based memory |
+| **2** | AWS deployment | Lambda, API Gateway, S3, CloudFront |
+| **3** | AWS Bedrock | Amazon Nova models replacing OpenAI |
+| **4** | Terraform IaC | Dev / Test / Prod environments automated |
+| **5** | GitHub Actions CI/CD | Push-to-deploy + OIDC authentication |
 
 ---
 
@@ -137,7 +137,7 @@ week2/
 - [Node.js 18+](https://nodejs.org)
 - [Python 3.12+](https://python.org)
 - [uv](https://docs.astral.sh/uv/) (Python package manager)
-- OpenAI or OpenRouter API key (Day 1–2) / AWS credentials (Day 3+)
+- OpenAI or OpenRouter API key (local dev) / AWS credentials (cloud deployment)
 
 ### Backend
 
@@ -173,7 +173,7 @@ Frontend runs at: `http://localhost:3000`
 - AWS CLI configured (`aws configure`)
 - Docker Desktop (for Lambda packaging)
 - Terraform installed (`terraform --version`)
-- IAM user with required permissions (see `docs/day2.md`)
+- IAM user with required permissions (Lambda, S3, API Gateway, CloudFront, Bedrock)
 
 ### Deploy to dev
 
@@ -242,7 +242,7 @@ DEFAULT_AWS_REGION=us-east-1
 
 ---
 
-## CI/CD (Day 5)
+## CI/CD
 
 GitHub Actions workflows automatically:
 - Build the Lambda package
