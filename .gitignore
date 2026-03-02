@@ -32,4 +32,21 @@ memory/
 .DS_Store
 Thumbs.db
 
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+*.tfvars
+*.tfvars.json
+
+# Terraform workspaces
+terraform.tfstate.d/
+
+# GitHub Actions secrets / local overrides
+backend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+
 
