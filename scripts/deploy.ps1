@@ -24,7 +24,14 @@ Set-Location ..
 # 2. Terraform init + workspace + apply
 Write-Step "Running terraform init..."
 Set-Location terraform
-terraform init -input=false
+$awsAccountId = aws sts get-caller-identity --query Account --output text
+$awsRegion = if ($env:DEFAULT_AWS_REGION) { $env:DEFAULT_AWS_REGION } else { "eu-west-2" }
+terraform init -input=false `
+  -backend-config="bucket=twin-terraform-state-$awsAccountId" `
+  -backend-config="key=$Environment/terraform.tfstate" `
+  -backend-config="region=$awsRegion" `
+  -backend-config="dynamodb_table=twin-terraform-locks" `
+  -backend-config="encrypt=true"
 if ($LASTEXITCODE -ne 0) { Write-Fail "terraform init failed!" }
 
 $workspaces = terraform workspace list
