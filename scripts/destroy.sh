@@ -50,6 +50,14 @@ MEMORY_BUCKET="${PROJECT_NAME}-${ENVIRONMENT}-memory-${AWS_ACCOUNT_ID}"
 aws s3 rm "s3://$FRONTEND_BUCKET" --recursive || echo "Frontend bucket not found or already empty"
 aws s3 rm "s3://$MEMORY_BUCKET" --recursive || echo "Memory bucket not found or already empty"
 
+# Create a dummy lambda zip if it doesn't exist (needed for destroy in GitHub Actions)
+if [ ! -f "../backend/lambda-deployment.zip" ]; then
+    echo "📦 Creating dummy lambda package for destroy operation..."
+    # Ensure backend directory exists
+    mkdir -p ../backend
+    echo "dummy" > ../backend/lambda-deployment.zip
+fi
+
 echo "🔥 Running terraform destroy..."
 
 # Run terraform destroy

@@ -65,6 +65,13 @@ try {
     Write-Host "  Memory bucket not found or already empty" -ForegroundColor Gray
 }
 
+# Create a dummy lambda zip if it doesn't exist (needed for destroy in GitHub Actions)
+$lambdaPath = Join-Path (Split-Path $PSScriptRoot -Parent) "backend\lambda-deployment.zip"
+if (-not (Test-Path $lambdaPath)) {
+    Write-Host "📦 Creating dummy lambda package for destroy operation..." -ForegroundColor Yellow
+    New-Item -ItemType File -Path $lambdaPath -Value "dummy" -Force | Out-Null
+}
+
 Write-Host "Running terraform destroy..." -ForegroundColor Yellow
 
 # Run terraform destroy with auto-approve
