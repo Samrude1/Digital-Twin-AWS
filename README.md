@@ -204,8 +204,8 @@ Copy `.env.example` and fill in values:
 
 ```bash
 # AWS Configuration
-AWS_ACCOUNT_ID=123456789012
-DEFAULT_AWS_REGION=us-east-1
+AWS_ACCOUNT_ID=178566695644
+DEFAULT_AWS_REGION=eu-west-2
 
 # Project
 PROJECT_NAME=twin
@@ -225,7 +225,7 @@ CORS_ORIGINS=https://your-cloudfront-domain.cloudfront.net
 S3_BUCKET=twin-prod-memory-123456789012
 USE_S3=true
 BEDROCK_MODEL_ID=amazon.nova-lite-v1:0
-DEFAULT_AWS_REGION=us-east-1
+DEFAULT_AWS_REGION=eu-west-2
 ```
 
 ---
@@ -238,7 +238,7 @@ DEFAULT_AWS_REGION=us-east-1
 | `amazon.nova-lite-v1:0` | Balanced | Medium | General conversations ✅ |
 | `amazon.nova-pro-v1:0` | Slowest | Highest | Complex reasoning |
 
-> **Note:** In some regions you may need a prefix: `us.amazon.nova-lite-v1:0` or `eu.amazon.nova-lite-v1:0`
+> **Note:** In some regions you may need a prefix: `eu.amazon.nova-lite-v1:0` or `us.amazon.nova-lite-v1:0`
 
 ---
 

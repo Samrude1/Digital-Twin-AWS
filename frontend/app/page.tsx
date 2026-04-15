@@ -6,10 +6,10 @@ export default function Home() {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-center text-gray-800 mb-2">
-            AI in Production
+            Digital Twin of Sami Rautanen
           </h1>
           <p className="text-center text-gray-600 mb-8">
-            Deploy your Digital Twin to the cloud
+            An AI-powered mirror of professional expertise and insights
           </p>
 
           <div className="h-[600px]">
@@ -17,7 +17,7 @@ export default function Home() {
           </div>
 
           <footer className="mt-8 text-center text-sm text-gray-500">
-            <p>Week 2: Building Your Digital Twin</p>
+            <p>Built with AWS, Terraform, and Generative AI</p>
           </footer>
         </div>
       </div>
