@@ -154,7 +154,7 @@ resource "aws_apigatewayv2_api" "main" {
     allow_credentials = false
     allow_headers     = ["*"]
     allow_methods     = ["GET", "POST", "OPTIONS"]
-    allow_origins     = ["*"]
+    allow_origins     = var.use_custom_domain ? ["https://${var.root_domain}", "https://www.${var.root_domain}"] : ["https://${aws_cloudfront_distribution.main.domain_name}"]
     max_age           = 300
   }
 }
