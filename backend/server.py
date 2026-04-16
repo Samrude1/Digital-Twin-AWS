@@ -45,6 +45,10 @@ USE_S3 = os.getenv("USE_S3", "false").lower() == "true"
 S3_BUCKET = os.getenv("S3_BUCKET", "")
 MEMORY_DIR = os.getenv("MEMORY_DIR", "../memory")
 
+# Bedrock Guardrail configuration
+GUARDRAIL_ID = os.getenv("GUARDRAIL_ID", "")
+GUARDRAIL_VERSION = os.getenv("GUARDRAIL_VERSION", "DRAFT")
+
 # Initialize S3 client if needed
 if USE_S3:
     s3_client = boto3.client("s3")
@@ -134,6 +138,15 @@ def call_bedrock(conversation: List[Dict], user_message: str) -> str:
     })
     
     try:
+        # Build guardrail config if ID is provided
+        guardrail_config = None
+        if GUARDRAIL_ID:
+            guardrail_config = {
+                "guardrailIdentifier": GUARDRAIL_ID,
+                "guardrailVersion": GUARDRAIL_VERSION,
+                "trace": "enabled"
+            }
+
         # Call Bedrock using the converse API
         response = bedrock_client.converse(
             modelId=BEDROCK_MODEL_ID,
@@ -142,7 +155,8 @@ def call_bedrock(conversation: List[Dict], user_message: str) -> str:
                 "maxTokens": 2000,
                 "temperature": 0.7,
                 "topP": 0.9
-            }
+            },
+            guardrailConfig=guardrail_config
         )
         
         # Extract the response text

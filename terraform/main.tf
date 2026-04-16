@@ -119,6 +119,58 @@ resource "aws_iam_role_policy_attachment" "lambda_s3" {
   role       = aws_iam_role.lambda_role.name
 }
 
+# Bedrock Guardrail
+resource "aws_bedrock_guardrail" "main" {
+  name                      = "${local.name_prefix}-guardrail"
+  blocked_input_messaging   = "I apologize, but I cannot assist with that specific request as it falls outside my professional guidelines."
+  blocked_outputs_messaging = "I apologize, but I cannot provide that information as it falls outside my professional guidelines."
+  description               = "Professional guardrails for Sami Rautanen's Digital Twin"
+
+  content_policy_config {
+    filters_config {
+      type            = "HATE"
+      input_strength  = "HIGH"
+      output_strength = "HIGH"
+    }
+    filters_config {
+      type            = "INSULTS"
+      input_strength  = "HIGH"
+      output_strength = "HIGH"
+    }
+    filters_config {
+      type            = "SEXUAL"
+      input_strength  = "HIGH"
+      output_strength = "HIGH"
+    }
+    filters_config {
+      type            = "VIOLENCE"
+      input_strength  = "HIGH"
+      output_strength = "HIGH"
+    }
+    filters_config {
+      type            = "MISCONDUCT"
+      input_strength  = "HIGH"
+      output_strength = "HIGH"
+    }
+  }
+
+  topic_policy_config {
+    topics_config {
+      name       = "Medical_Financial_Advice"
+      examples   = ["What medicine should I take for a fever?", "How should I invest my inheritance?", "What is the best crypto to buy right now?"]
+      type       = "DENY"
+      definition = "Providing specific medical, legal, or financial investment advice."
+    }
+  }
+
+  tags = local.common_tags
+}
+
+resource "aws_bedrock_guardrail_version" "main" {
+  guardrail_arn = aws_bedrock_guardrail.main.guardrail_arn
+  description   = "V1 of professional guardrails"
+}
+
 # Lambda function
 resource "aws_lambda_function" "api" {
   filename         = "${path.module}/../backend/lambda-deployment.zip"
@@ -137,6 +189,8 @@ resource "aws_lambda_function" "api" {
       S3_BUCKET        = aws_s3_bucket.memory.id
       USE_S3           = "true"
       BEDROCK_MODEL_ID = var.bedrock_model_id
+      GUARDRAIL_ID     = aws_bedrock_guardrail.main.guardrail_id
+      GUARDRAIL_VERSION = aws_bedrock_guardrail_version.main.version
     }
   }
 
