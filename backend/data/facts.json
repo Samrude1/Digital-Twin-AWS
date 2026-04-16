@@ -1,24 +1,27 @@
 {
     "full_name": "Sami Rautanen",
     "name": "Sami",
+    "year_of_birth": 1977,
     "current_role": "AI Engineer & Technical Designer",
-    "location": "Finland",
+    "location": "Vantaa, Finland",
     "website": "https://www.samirautanen.fi",
     "email": "samrude1@outlook.com",
     "linkedin": "www.linkedin.com/in/sami-rautanen-022095325",
     "github": "github.com/Samrude1",
     "specialties": [
-        "Multi-agent AI systems & orchestration",
-        "Production agentic platforms (CrewAI, LangGraph, AutoGen, MCP)",
-        "Full-stack web development (Next.js, React, TypeScript, Node.js)",
-        "Game development (Unity, C#)",
-        "Technical design & 3D modeling / CAD"
+        "Autonomous multi-agent systems & orchestration",
+        "Production-grade agentic platforms (CrewAI, LangGraph, AutoGen, MCP)",
+        "AWS Serverless Architecture & Terraform (IaC)",
+        "Full-stack AI applications (FastAPI, Next.js, TypeScript)",
+        "Technical Design & Systems Engineering Mindset",
+        "Game development & Interactive Logic (Unity, C#)"
     ],
-    "years_experience": 3,
+    "years_experience": 4,
     "education": [
         {
-            "degree": "Technical Design",
+            "degree": "Technical Design (Tekninen suunnittelija)",
             "institution": "Hyria Ammattiopisto",
+            "specialization": "3D Visualization & Structural Design",
             "year": "2020"
         },
         {
@@ -27,70 +30,72 @@
             "year": "2023"
         }
     ],
-    "companies": [
+    "evolution": [
         {
-            "name": "Murata Finland",
-            "role": "Specialist — MEMS Technology (Digital/Industrial Precision)",
-            "type": "Employment"
+            "stage": "Specialist",
+            "company": "Murata Finland",
+            "focus": "MEMS Technology & Digital/Industrial Precision"
         },
         {
-            "name": "MyProductions",
-            "role": "Founder — Digital products for the web",
-            "type": "Founded"
+            "stage": "Programmer",
+            "focus": "C# Systems Development & Full-Stack Apps"
         },
         {
-            "name": "CodeRumble",
-            "role": "Co-founder — Educational content for developers",
-            "type": "Co-founded"
+            "stage": "AI Engineer",
+            "focus": "Multi-agent orchestration, Gemini 2.5, production agentic systems"
         }
     ],
     "key_projects": [
         {
-            "name": "Agentic Business Intelligence",
-            "description": "Enterprise-grade multi-agent orchestration platform (OpenAI Agents SDK / Gemini 2.0 Flash). 6-agent Sales Intelligence Team + 3-agent Deep Research Team. Custom tool integration, memory management, real-time process streaming."
+            "name": "Sidekick AI",
+            "description": "Autonomous tool-using assistant powered by Gemini 2.5 Flash. Features a LangGraph worker-evaluator pattern, web browsing (Playwright), and code execution (Python REPL)."
         },
         {
-            "name": "Autonomous Career Digital Twin",
-            "description": "Autonomous AI agent deployed on portfolio. Handles visitor inquiries, manages email workflows, sends real-time notifications. Production deployment with FastAPI on Render."
+            "name": "EngineeringTeam Crew",
+            "description": "Full autonomous software team drafting, coding, and testing Python apps. Utilizing CrewAI orchestration with Claude 3.7 and GPT-4o for end-to-end automation."
         },
         {
-            "name": "SkyGuide B737-800 Performance Computer",
-            "description": "Professional flight performance calculator with live METAR, AI co-pilot (Gemini), and SimBrief import. Computes V-speeds, N1 thrust, VREF/VAPP, TOD."
+            "name": "ContractSense AI",
+            "description": "Legal-grade contract risk analysis platform. Features PII-masking, CoT-visualization of legal risks, and zero-login demo for immediate business value."
         },
         {
-            "name": "NordicCode Bootcamp Finder",
-            "description": "Full-stack REST API platform for discovering coding bootcamps. User authentication, live backend, reviews. Node.js + React."
+            "name": "CareAssist AI",
+            "description": "HealthTech solution for autonomous patient note structuring and triage, built with AWS Event-driven architecture."
+        },
+        {
+            "name": "Digital Twin (Prod)",
+            "description": "Autonomous production-grade AI representation on AWS Serverless (Amazon Nova, FastAPI, Terraform, CI/CD)."
+        },
+        {
+            "name": "Agentsquad",
+            "description": "Scalable AI agent teams with specialized skills for distributed task execution."
+        },
+        {
+            "name": "SaaS_AI",
+            "description": "Enterprise-grade AI Meeting Intelligence platform for automated summarization and action tracking."
         },
         {
             "name": "Yes Man Chess Terminal",
-            "description": "Retro chess AI with personality-driven commentary (Gemini). Stockfish engine, 4 difficulty levels, dynamic mood system, authentic CRT effects."
+            "description": "Retro chess game with personality-driven AI commentary (Gemini), Stockfish engine, and authentic CRT effects."
         },
         {
-            "name": "TreeniTrack Pro",
-            "description": "Intelligent workout tracking app with integrated AI coach, visual analytics, and personalized training recommendations."
-        },
-        {
-            "name": "Poker Analytics Engine",
-            "description": "6-max No-Limit Hold'em training simulator. Position-based AI opponents, live HUD with VPIP/PFR/3-Bet stats, aggression factor tracking."
+            "name": "SkyGuide B737-800 Performance Computer",
+            "description": "Professional flight performance calculator with live METAR, AI co-pilot, and SimBrief integration."
         }
     ],
     "ai_frameworks": [
-        "CrewAI",
-        "LangGraph",
-        "AutoGen",
-        "MCP Servers",
-        "OpenAI Agents SDK",
-        "Gemini 2.0"
+        "CrewAI & LangGraph",
+        "AutoGen Frameworks",
+        "MCP Server Integration",
+        "Gemini 2.5 / 2.0",
+        "Claude 3.7 / 3.5 Sonnet",
+        "Amazon Nova Models",
+        "OpenAI GPT-4o"
     ],
-    "languages_tools": [
-        "Python",
-        "TypeScript",
-        "JavaScript",
-        "C#",
-        "React",
-        "Next.js",
-        "FastAPI",
-        "Node.js",
-        "Tailwind CSS"
+    "cloud_deployment": [
+        "AWS (Lambda, SQS, DynamoDB, S3, Bedrock)",
+        "Terraform (Infrastructure as Code)",
+        "GitHub Actions (CI/CD Pipelines)",
+        "Hugging Face Spaces"
     ]
-}
+}

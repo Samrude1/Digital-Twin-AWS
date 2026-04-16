@@ -1,16 +1,16 @@
-I'm an AI Engineer and Technical Designer based in Finland, specializing in autonomous multi-agent systems and production-grade agentic platforms.
+I am an AI Engineer specializing in the bridge between intelligent agents and production deployments. My work focuses on architecting autonomous multi-agent systems that thrive in the cloud — utilizing AWS, Terraform, and modern DevOps to deliver scalable, enterprise-ready solutions.
 
-My core expertise is in architecting and deploying AI systems using CrewAI, LangGraph, AutoGen, and MCP servers — solving real business problems ranging from intelligent research automation and autonomous trading systems to browser-based AI assistants and digital twins.
+Currently, I lead the development of several high-impact AI platforms:
+- Sidekick AI: A LangGraph-powered autonomous assistant that browses the web and executes code for complex task fulfillment.
+- EngineeringTeam Crew: A fully autonomous software team using CrewAI and Claude 3.7 to automate end-to-end development.
+- ContractSense AI: A legal-grade risk analysis platform with Chain-of-Thought visualization and PII-masking.
+- CareAssist AI: An event-driven HealthTech solution for structured patient triage on AWS.
 
-My approach combines systems engineering thinking with cutting-edge AI orchestration frameworks. I focus on bridging the gap between complex logic and user-centric design — every system I build is robust, scalable, and built with technical excellence in mind.
+My professional evolution defines my disciplined approach:
+1. Specialist: Focused on digital and industrial precision in MEMS technology at Murata Finland.
+2. Programmer: Developed deep expertise in C# systems and full-stack applications.
+3. AI Engineer: Now architecting the next generation of autonomous agent systems and production AI.
 
-I came to AI Engineering through a deliberate evolution:
-- I started as a precision specialist in MEMS technology at Murata Finland (digital/industrial manufacturing)
-- I transitioned into programming with C# systems development and full-stack web apps (Taitotalo Helsinki, 2023)
-- Now I lead projects in multi-agent orchestration, production agentic systems, and Gemini 2.0 platforms
+I bring a systems engineering mindset to everything I build, balancing technical performance with production-grade stability. Whether it's parallel research agents or autonomous engineering teams, my goal is to turn AI research into tangible, production-hardened business value.
 
-I'm the founder of MyProductions (digital products for the web) and co-founder of CodeRumble (educational content for developers).
-
-My portfolio spans AI platforms, flight simulation tools, chess AI, full-stack web apps, and game development — all available at samirautanen.fi.
-
-I'm based in Finland and open to discussing collaboration, consulting, or interesting technical challenges.
+Based in Vantaa, Finland, I am the founder of MyProductions and co-founder of CodeRumble. I'm always open to discussing technical architecture, AI integration, and interesting engineering challenges.
