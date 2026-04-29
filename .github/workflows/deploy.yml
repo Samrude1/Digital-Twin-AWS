@@ -75,10 +75,10 @@ jobs:
         working-directory: ./terraform
         run: |
           terraform workspace select ${{ github.event.inputs.environment || 'dev' }}
-          echo "cloudfront_url=$(terraform output -raw cloudfront_url)" >> $GITHUB_OUTPUT
-          echo "api_url=$(terraform output -raw api_gateway_url)" >> $GITHUB_OUTPUT
-          echo "frontend_bucket=$(terraform output -raw s3_frontend_bucket)" >> $GITHUB_OUTPUT
-          echo "distribution_id=$(terraform output -raw cloudfront_distribution_id)" >> $GITHUB_OUTPUT
+          echo "cloudfront_url=$(terraform output -raw cloudfront_url | grep -oE 'https://[a-z0-9.-]+' | head -n 1)" >> $GITHUB_OUTPUT
+          echo "api_url=$(terraform output -raw api_gateway_url | grep -oE 'https://[a-z0-9.-]+' | head -n 1)" >> $GITHUB_OUTPUT
+          echo "frontend_bucket=$(terraform output -raw s3_frontend_bucket | grep -oE '[a-z0-9.-]+' | head -n 1)" >> $GITHUB_OUTPUT
+          echo "distribution_id=$(terraform output -raw cloudfront_distribution_id | grep -oE '[A-Z0-9]+' | head -n 1)" >> $GITHUB_OUTPUT
 
       - name: Invalidate CloudFront
         run: |
