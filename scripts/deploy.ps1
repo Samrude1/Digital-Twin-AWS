@@ -52,11 +52,11 @@ Write-Ok "Terraform apply complete"
 
 # 3. Read and validate outputs
 Write-Step "Reading Terraform outputs..."
-$ApiUrl         = terraform output -raw api_gateway_url 2>$null
-$FrontendBucket = terraform output -raw s3_frontend_bucket 2>$null
-$CfUrl          = terraform output -raw cloudfront_url 2>$null
-$CustomUrl      = ""
-try { $CustomUrl = terraform output -raw custom_domain_url 2>$null } catch {}
+$ApiUrl = (terraform output -raw api_gateway_url).Trim().Trim('"')
+$FrontendBucket = (terraform output -raw s3_frontend_bucket).Trim().Trim('"')
+$CfUrl = (terraform output -raw cloudfront_url).Trim().Trim('"')
+$CustomUrl = ""
+try { $CustomUrl = (terraform output -raw custom_domain_url).Trim().Trim('"') } catch {}
 
 if ([string]::IsNullOrWhiteSpace($ApiUrl) -or ($ApiUrl -match "Warning")) {
     Write-Fail "Could not read api_gateway_url from Terraform. Did the apply succeed?"
