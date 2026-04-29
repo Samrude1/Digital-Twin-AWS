@@ -1,5 +1,6 @@
-# Data source to get current AWS account ID
+# Data source to get current AWS account ID and region
 data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
 
 locals {
   aliases = var.use_custom_domain && var.root_domain != "" ? [
@@ -109,14 +110,55 @@ resource "aws_iam_role_policy_attachment" "lambda_basic" {
   role       = aws_iam_role.lambda_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_bedrock" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonBedrockFullAccess"
-  role       = aws_iam_role.lambda_role.name
+# Scoped IAM policies for Lambda
+resource "aws_iam_role_policy" "lambda_bedrock_policy" {
+  name = "${local.name_prefix}-lambda-bedrock-policy"
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "bedrock:Converse",
+          "bedrock:InvokeModel"
+        ]
+        Effect   = "Allow"
+        Resource = "arn:aws:bedrock:${data.aws_region.current.name}::foundation-model/amazon.nova-*"
+      },
+      {
+        Action = [
+          "bedrock:GetGuardrail",
+          "bedrock:ApplyGuardrail"
+        ]
+        Effect   = "Allow"
+        Resource = [aws_bedrock_guardrail.main.guardrail_arn]
+      }
+    ]
+  })
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_s3" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-  role       = aws_iam_role.lambda_role.name
+resource "aws_iam_role_policy" "lambda_s3_policy" {
+  name = "${local.name_prefix}-lambda-s3-policy"
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket"
+        ]
+        Effect = "Allow"
+        Resource = [
+          aws_s3_bucket.memory.arn,
+          "${aws_s3_bucket.memory.arn}/*"
+        ]
+      }
+    ]
+  })
 }
 
 # Bedrock Guardrail

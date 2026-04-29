@@ -235,14 +235,25 @@ DEFAULT_AWS_REGION=eu-west-2
 
 ---
 
-## 🛡️ AI Safety & Guardrails
+## 🛡️ Security & AI Guardrails
 
-This project utilizes **Amazon Bedrock Guardrails** to ensure professional and safe interactions. Unlike simple prompt instructions, these are "hard" filters enforced by AWS at the infrastructure level.
+This project implements multi-layered security to ensure safety, privacy, and infrastructure integrity.
 
+### 1. AI Safety (Amazon Bedrock Guardrails)
+Unlike simple prompt instructions, these are "hard" filters enforced at the infrastructure level.
 - **Content Filtering:** High-sensitivity filters for Hate Speech, Insults, Sexual Content, Violence, and Misconduct.
 - **Topic Blocking:** Explicit denial of specific non-professional topics such as Medical, Financial, or Legal advice.
-- **Input/Output Protection:** Both user prompts and AI responses are analyzed per millisecond before delivery.
-- **Automated Refusals:** If a violation is detected, the AI provides a standardized professional refusal message.
+- **Real-time Protection:** Both user prompts and AI responses are analyzed in milliseconds before delivery.
+
+### 2. Application Security
+- **Path Traversal Protection:** All user-provided identifiers (such as `session_id`) are validated using strict regex patterns to prevent unauthorized file access.
+- **Input Validation:** API endpoints use Pydantic models to ensure type safety and input correctness.
+- **Environment Isolation:** All configurations are loaded from environment variables and never exposed to the AI model via prompts.
+
+### 3. Infrastructure Security (AWS & Terraform)
+- **Least Privilege IAM:** Lambda functions operate with scoped-down IAM policies, restricted only to the necessary S3 buckets and Bedrock models.
+- **OIDC Authentication:** GitHub Actions uses short-lived OpenID Connect (OIDC) tokens — no long-lived AWS keys are stored in GitHub.
+- **Secret Management:** A strict `.gitignore` policy prevents the leak of `.env`, `.pem`, and `.tfstate` files into version control.
 
 ---
 

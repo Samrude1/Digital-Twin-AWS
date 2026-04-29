@@ -26,7 +26,7 @@ Write-Step "Running terraform init..."
 Set-Location terraform
 $awsAccountId = aws sts get-caller-identity --query Account --output text
 $awsRegion = if ($env:DEFAULT_AWS_REGION) { $env:DEFAULT_AWS_REGION } else { "eu-west-2" }
-terraform init -input=false `
+terraform init -reconfigure -input=false `
   -backend-config="bucket=twin-terraform-state-$awsAccountId" `
   -backend-config="key=$Environment/terraform.tfstate" `
   -backend-config="region=$awsRegion" `

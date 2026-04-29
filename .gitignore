@@ -48,5 +48,17 @@ backend/.env
 frontend/.env.local
 frontend/.env.*.local
 
+# Sensitive files
+*.pem
+*.json
+!backend/data/*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!next.config.ts
+!pyproject.toml
+!uv.lock
+!*.tfvars.json
+
 
 

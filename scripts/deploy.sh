@@ -26,7 +26,7 @@ fi
 # Use DEFAULT_AWS_REGION or fallback to us-east-1
 AWS_REGION=${DEFAULT_AWS_REGION:-eu-west-2}
 
-terraform init -input=false \
+terraform init -reconfigure -input=false \
   -backend-config="bucket=twin-terraform-state-${AWS_ACCOUNT_ID}" \
   -backend-config="key=${ENVIRONMENT}/terraform.tfstate" \
   -backend-config="region=${AWS_REGION}" \

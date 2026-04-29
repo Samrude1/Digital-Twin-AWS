@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from typing import Optional, List, Dict
 import json
 import uuid
+import re
 from datetime import datetime
 import boto3
 from botocore.exceptions import ClientError
@@ -196,6 +197,11 @@ async def health_check():
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
+        # Validate session ID if provided to prevent path traversal
+        if request.session_id:
+            if not re.match(r"^[a-zA-Z0-9\-_]{1,64}$", request.session_id):
+                raise HTTPException(status_code=400, detail="Invalid session_id format")
+        
         # Generate session ID if not provided
         session_id = request.session_id or str(uuid.uuid4())
 
@@ -233,6 +239,10 @@ async def chat(request: ChatRequest):
 async def get_conversation(session_id: str):
     """Retrieve conversation history"""
     try:
+        # Validate session ID to prevent path traversal
+        if not re.match(r"^[a-zA-Z0-9\-_]{1,64}$", session_id):
+            raise HTTPException(status_code=400, detail="Invalid session_id format")
+
         conversation = load_conversation(session_id)
         return {"session_id": session_id, "messages": conversation}
     except Exception as e:
