@@ -49,8 +49,8 @@ fi
 
 # 3. Read outputs
 echo "📋 Reading Terraform outputs..."
-API_URL=$(terraform output -raw api_gateway_url | tr -d '"' | xargs)
-FRONTEND_BUCKET=$(terraform output -raw s3_frontend_bucket | tr -d '"' | xargs)
+API_URL=$(terraform output -raw api_gateway_url | grep -oE "https://[a-z0-9.-]+" | head -n 1)
+FRONTEND_BUCKET=$(terraform output -raw s3_frontend_bucket | grep -oE "[a-z0-9.-]+" | head -n 1)
 
 echo "API URL: $API_URL"
 echo "Frontend Bucket: $FRONTEND_BUCKET"
