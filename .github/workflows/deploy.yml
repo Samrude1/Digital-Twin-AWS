@@ -8,7 +8,7 @@ on:
       environment:
         description: 'Environment to deploy'
         required: true
-        default: 'dev'
+        default: 'prod'
         type: choice
         options:
           - dev
@@ -21,9 +21,9 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy to ${{ github.event.inputs.environment || 'dev' }}
+    name: Deploy to ${{ github.event.inputs.environment || 'prod' }}
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment || 'dev' }}
+    environment: ${{ github.event.inputs.environment || 'prod' }}
     
     steps:
       - name: Checkout code
@@ -66,7 +66,7 @@ jobs:
           
           # Make script executable and run it
           chmod +x scripts/deploy.sh
-          ./scripts/deploy.sh ${{ github.event.inputs.environment || 'dev' }}
+          ./scripts/deploy.sh ${{ github.event.inputs.environment || 'prod' }}
         env:
           AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
           
@@ -74,7 +74,7 @@ jobs:
         id: deploy_outputs
         working-directory: ./terraform
         run: |
-          terraform workspace select ${{ github.event.inputs.environment || 'dev' }}
+          terraform workspace select ${{ github.event.inputs.environment || 'prod' }}
           echo "cloudfront_url=$(terraform output -raw cloudfront_url | grep -oE 'https://[a-z0-9.-]+' | head -n 1)" >> $GITHUB_OUTPUT
           echo "api_url=$(terraform output -raw api_gateway_url | grep -oE 'https://[a-z0-9.-]+' | head -n 1)" >> $GITHUB_OUTPUT
           echo "frontend_bucket=$(terraform output -raw s3_frontend_bucket | grep -oE '[a-z0-9.-]+' | head -n 1)" >> $GITHUB_OUTPUT
