@@ -145,18 +145,24 @@ def call_bedrock(conversation: List[Dict], user_message: str) -> str:
                 "trace": "enabled"
             }
 
-        # Call Bedrock using the converse API
-        response = bedrock_client.converse(
-            modelId=BEDROCK_MODEL_ID,
-            messages=messages,
-            system=system_prompts,
-            inferenceConfig={
+        # Prepare arguments for the converse call
+        converse_args = {
+            "modelId": BEDROCK_MODEL_ID,
+            "messages": messages,
+            "system": system_prompts,
+            "inferenceConfig": {
                 "maxTokens": 2000,
                 "temperature": 0.7,
                 "topP": 0.9
-            },
-            guardrailConfig=guardrail_config
-        )
+            }
+        }
+
+        # Add guardrail config only if provided
+        if guardrail_config:
+            converse_args["guardrailConfig"] = guardrail_config
+
+        # Call Bedrock using the converse API
+        response = bedrock_client.converse(**converse_args)
         
         # Extract the response text
         return response["output"]["message"]["content"][0]["text"]

@@ -1,16 +1,14 @@
-I am an AI Engineer specializing in the bridge between intelligent agents and production deployments. My work focuses on architecting autonomous multi-agent systems that thrive in the cloud — utilizing AWS, Terraform, and modern DevOps to deliver scalable, enterprise-ready solutions.
+I am an AI Engineer specializing in the bridge between intelligent agents and production deployments. I architect autonomous multi-agent systems that don't just work in a lab, but thrive in the cloud — utilizing AWS, Terraform, and modern DevOps to deliver scalable, enterprise-ready solutions.
+
+**Current Status:** I have passed the pre-selection for the **Saranen Future Skills Academy** (Software Recruitment Training) and am currently seeking a partner company that is interested in leveraging production-grade AI expertise.
 
 Currently, I lead the development of several high-impact AI platforms:
-- Sidekick AI: A LangGraph-powered autonomous assistant that browses the web and executes code for complex task fulfillment.
-- EngineeringTeam Crew: A fully autonomous software team using CrewAI and Claude 3.7 to automate end-to-end development.
-- ContractSense AI: A legal-grade risk analysis platform with Chain-of-Thought visualization and PII-masking.
-- CareAssist AI: An event-driven HealthTech solution for structured patient triage on AWS.
+- Sidekick AI (Live): A LangGraph-powered autonomous assistant with self-correction and web browsing capabilities.
+- EngineeringTeam Crew (Live): A fully autonomous software team using CrewAI and Claude 3.7 to automate development pipelines.
+- AgentSquad Platform (Live): A full-stack multi-agent ecosystem for sales, research, and meeting preparation.
+- Indie Game Portfolio (Live): A collection of 8 published games on Itch.io showcasing mechanics and interactive AI.
+- ContractSense AI (In Dev): A legal-grade risk analysis platform utilizing MCP-protocol and PII-masking for secure processing.
 
-My professional evolution defines my disciplined approach:
-1. Specialist: Focused on digital and industrial precision in MEMS technology at Murata Finland.
-2. Programmer: Developed deep expertise in C# systems and full-stack applications.
-3. AI Engineer: Now architecting the next generation of autonomous agent systems and production AI.
+My background in industrial MEMS technology (Murata Finland, 1999-2024) and systems engineering informs my disciplined approach to AI orchestration. I build AI platforms with custom tool integration, long-term memory, and robust error-handling, ensuring that agents are both capable and reliable.
 
-I bring a systems engineering mindset to everything I build, balancing technical performance with production-grade stability. Whether it's parallel research agents or autonomous engineering teams, my goal is to turn AI research into tangible, production-hardened business value.
-
-Based in Vantaa, Finland, I am the founder of MyProductions and co-founder of CodeRumble. I'm always open to discussing technical architecture, AI integration, and interesting engineering challenges.
+Based in Vantaa, Finland, I focus on the entire lifecycle of an AI product: from the first prompt to the final CI/CD pipeline. My goal is to turn AI research into tangible, production-hardened business value.

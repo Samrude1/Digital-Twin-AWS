@@ -3,6 +3,7 @@
     "name": "Sami",
     "year_of_birth": 1977,
     "current_role": "AI Engineer & Technical Designer",
+    "current_status": "Passed pre-selection for Saranen Future Skills Academy (Software). Currently seeking a partner company for recruitment training.",
     "location": "Vantaa, Finland",
     "website": "https://www.samirautanen.fi",
     "email": "samrude1@outlook.com",
@@ -14,7 +15,7 @@
         "AWS Serverless Architecture & Terraform (IaC)",
         "Full-stack AI applications (FastAPI, Next.js, TypeScript)",
         "Technical Design & Systems Engineering Mindset",
-        "Game development & Interactive Logic (Unity, C#)"
+        "Game development & Interactive Logic (Unity, C#, JS)"
     ],
     "years_experience": 4,
     "education": [
@@ -32,15 +33,18 @@
     ],
     "evolution": [
         {
+            "years": "1999-2024",
             "stage": "Specialist",
             "company": "Murata Finland",
             "focus": "MEMS Technology & Digital/Industrial Precision"
         },
         {
+            "years": "2023-2024",
             "stage": "Programmer",
             "focus": "C# Systems Development & Full-Stack Apps"
         },
         {
+            "years": "2024-2026",
             "stage": "AI Engineer",
             "focus": "Multi-agent orchestration, Gemini 2.5, production agentic systems"
         }
@@ -48,39 +52,43 @@
     "key_projects": [
         {
             "name": "Sidekick AI",
+            "status": "Live",
+            "link": "https://huggingface.co/spaces/samrude1/Sidekick",
             "description": "Autonomous tool-using assistant powered by Gemini 2.5 Flash. Features a LangGraph worker-evaluator pattern, web browsing (Playwright), and code execution (Python REPL)."
         },
         {
             "name": "EngineeringTeam Crew",
+            "status": "Live",
+            "link": "https://huggingface.co/spaces/samrude1/EngineeringTeam",
             "description": "Full autonomous software team drafting, coding, and testing Python apps. Utilizing CrewAI orchestration with Claude 3.7 and GPT-4o for end-to-end automation."
         },
         {
-            "name": "ContractSense AI",
-            "description": "Legal-grade contract risk analysis platform. Features PII-masking, CoT-visualization of legal risks, and zero-login demo for immediate business value."
-        },
-        {
-            "name": "CareAssist AI",
-            "description": "HealthTech solution for autonomous patient note structuring and triage, built with AWS Event-driven architecture."
+            "name": "AgentSquad Platform",
+            "status": "Live",
+            "link": "https://agent-squad-sigma.vercel.app/?access=portfolio_access",
+            "description": "Full-stack multi-agent platform: Sales team drafts/sends emails via Resend, Deep Research delivers cited reports, and Meeting Prep generates strategic briefings."
         },
         {
             "name": "Digital Twin (Prod)",
+            "status": "Live",
+            "link": "https://d15k7n9dhqyy0d.cloudfront.net/",
             "description": "Autonomous production-grade AI representation on AWS Serverless (Amazon Nova, FastAPI, Terraform, CI/CD)."
         },
         {
-            "name": "Agentsquad",
-            "description": "Scalable AI agent teams with specialized skills for distributed task execution."
+            "name": "Indie Game Portfolio",
+            "status": "Live",
+            "link": "https://sr3design.itch.io/",
+            "description": "8 published games on Itch.io showcasing game mechanics, AI, and level design. Built with Unity/C# and JavaScript."
         },
         {
-            "name": "SaaS_AI",
-            "description": "Enterprise-grade AI Meeting Intelligence platform for automated summarization and action tracking."
+            "name": "ContractSense AI",
+            "status": "In Development",
+            "description": "Legal-grade contract risk analysis platform. Features MCP-protocol, PII-masking, CoT-visualization, and Langfuse observability."
         },
         {
-            "name": "Yes Man Chess Terminal",
-            "description": "Retro chess game with personality-driven AI commentary (Gemini), Stockfish engine, and authentic CRT effects."
-        },
-        {
-            "name": "SkyGuide B737-800 Performance Computer",
-            "description": "Professional flight performance calculator with live METAR, AI co-pilot, and SimBrief integration."
+            "name": "CareAssist AI",
+            "status": "In Development",
+            "description": "HealthTech solution for autonomous patient note structuring and triage, built with AWS Event-driven architecture."
         }
     ],
     "ai_frameworks": [
@@ -90,12 +98,13 @@
         "Gemini 2.5 / 2.0",
         "Claude 3.7 / 3.5 Sonnet",
         "Amazon Nova Models",
-        "OpenAI GPT-4o"
+        "OpenRouter AI Routing"
     ],
     "cloud_deployment": [
         "AWS (Lambda, SQS, DynamoDB, S3, Bedrock)",
+        "Azure & Google Cloud",
         "Terraform (Infrastructure as Code)",
         "GitHub Actions (CI/CD Pipelines)",
-        "Hugging Face Spaces"
+        "Hugging Face Spaces & Vercel"
     ]
 }
