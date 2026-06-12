@@ -35,7 +35,7 @@ variable "api_throttle_burst_limit" {
 }
 
 variable "api_throttle_rate_limit" {
-  description = "API Gateway throttle rate limit"
+  description = "API Gateway throttle rate limit (requests/second)"
   type        = number
   default     = 5
 }
@@ -48,6 +48,26 @@ variable "use_custom_domain" {
 
 variable "root_domain" {
   description = "Apex domain name, e.g. mydomain.com"
+  type        = string
+  default     = ""
+}
+
+# Cost Protection
+
+variable "daily_budget_usd" {
+  description = "Hard daily cost limit in USD. API returns 503 when exceeded (DynamoDB circuit breaker)."
+  type        = number
+  default     = 5.0
+}
+
+variable "monthly_budget_usd" {
+  description = "Monthly AWS cost budget in USD. Triggers SNS alert and Lambda circuit breaker at 80 percent."
+  type        = number
+  default     = 20.0
+}
+
+variable "budget_alert_email" {
+  description = "Email address that receives AWS Budget overage alerts and circuit-breaker notifications."
   type        = string
   default     = ""
 }

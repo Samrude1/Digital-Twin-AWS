@@ -110,7 +110,155 @@ resource "aws_iam_role_policy_attachment" "lambda_basic" {
   role       = aws_iam_role.lambda_role.name
 }
 
-# Scoped IAM policies for Lambda
+# ─────────────────────────────────────────────────────────────────────────────
+# Cost Protection Infrastructure
+# ─────────────────────────────────────────────────────────────────────────────
+
+# DynamoDB table for daily cost tracking (used by Python circuit breaker)
+resource "aws_dynamodb_table" "cost_tracker" {
+  name         = "${local.name_prefix}-cost-tracker"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "date"
+  tags         = local.common_tags
+
+  attribute {
+    name = "date"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "expires_at"
+    enabled        = true
+  }
+}
+
+# SNS topic for budget alerts and circuit-breaker notifications
+resource "aws_sns_topic" "budget_alarm" {
+  name = "${local.name_prefix}-budget-alarm"
+  tags = local.common_tags
+}
+
+# Optional: email subscription (created only when budget_alert_email is set)
+resource "aws_sns_topic_subscription" "budget_email" {
+  count     = var.budget_alert_email != "" ? 1 : 0
+  topic_arn = aws_sns_topic.budget_alarm.arn
+  protocol  = "email"
+  endpoint  = var.budget_alert_email
+}
+
+# IAM role for the budget breaker Lambda
+resource "aws_iam_role" "budget_breaker_role" {
+  name = "${local.name_prefix}-budget-breaker-role"
+  tags = local.common_tags
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
+      Principal = { Service = "lambda.amazonaws.com" }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "budget_breaker_basic" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  role       = aws_iam_role.budget_breaker_role.name
+}
+
+resource "aws_iam_role_policy" "budget_breaker_policy" {
+  name = "${local.name_prefix}-budget-breaker-policy"
+  role = aws_iam_role.budget_breaker_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        # Allow killing the main API Lambda by setting concurrency to 0
+        Action   = ["lambda:PutFunctionConcurrency", "lambda:GetFunctionConcurrency"]
+        Effect   = "Allow"
+        Resource = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${local.name_prefix}-api"
+      },
+      {
+        # Allow sending the shutdown notification
+        Action   = "sns:Publish"
+        Effect   = "Allow"
+        Resource = aws_sns_topic.budget_alarm.arn
+      }
+    ]
+  })
+}
+
+# Budget breaker Lambda (triggered by SNS when monthly budget threshold is hit)
+resource "aws_lambda_function" "budget_breaker" {
+  filename         = "${path.module}/../backend/budget_breaker.zip"
+  function_name    = "${local.name_prefix}-budget-breaker"
+  role             = aws_iam_role.budget_breaker_role.arn
+  handler          = "budget_breaker.handler"
+  runtime          = "python3.12"
+  timeout          = 30
+  tags             = local.common_tags
+
+  # The zip is created from budget_breaker.py by the deploy script.
+  # source_code_hash forces re-deploy when the file changes.
+  source_code_hash = filebase64sha256("${path.module}/../backend/budget_breaker.zip")
+
+  environment {
+    variables = {
+      MAIN_FUNCTION_NAME  = "${local.name_prefix}-api"
+      ALERT_SNS_TOPIC_ARN = aws_sns_topic.budget_alarm.arn
+      MONTHLY_BUDGET_USD  = tostring(var.monthly_budget_usd)
+    }
+  }
+}
+
+# Allow SNS to invoke the budget breaker Lambda
+resource "aws_lambda_permission" "budget_breaker_sns" {
+  statement_id  = "AllowSNSTrigger"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.budget_breaker.function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.budget_alarm.arn
+}
+
+# Subscribe the budget breaker Lambda to the SNS topic
+resource "aws_sns_topic_subscription" "budget_lambda" {
+  topic_arn = aws_sns_topic.budget_alarm.arn
+  protocol  = "lambda"
+  endpoint  = aws_lambda_function.budget_breaker.arn
+}
+
+# AWS Budgets: monthly cost alert → triggers SNS at 80% of limit
+resource "aws_budgets_budget" "monthly" {
+  name         = "${local.name_prefix}-monthly-budget"
+  budget_type  = "COST"
+  limit_amount = tostring(var.monthly_budget_usd)
+  limit_unit   = "USD"
+  time_unit    = "MONTHLY"
+
+  notification {
+    comparison_operator       = "GREATER_THAN"
+    threshold                 = 80
+    threshold_type            = "PERCENTAGE"
+    notification_type         = "ACTUAL"
+    subscriber_sns_topic_arns = [aws_sns_topic.budget_alarm.arn]
+  }
+
+  notification {
+    comparison_operator       = "GREATER_THAN"
+    threshold                 = 100
+    threshold_type            = "PERCENTAGE"
+    notification_type         = "ACTUAL"
+    subscriber_sns_topic_arns = [aws_sns_topic.budget_alarm.arn]
+  }
+
+  tags = local.common_tags
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Scoped IAM policies for the main API Lambda
+# ─────────────────────────────────────────────────────────────────────────────
+
 resource "aws_iam_role_policy" "lambda_bedrock_policy" {
   name = "${local.name_prefix}-lambda-bedrock-policy"
   role = aws_iam_role.lambda_role.id
@@ -156,6 +304,27 @@ resource "aws_iam_role_policy" "lambda_s3_policy" {
           aws_s3_bucket.memory.arn,
           "${aws_s3_bucket.memory.arn}/*"
         ]
+      }
+    ]
+  })
+}
+
+# Allow the main API Lambda to read/write the cost tracking table
+resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
+  name = "${local.name_prefix}-lambda-dynamodb-policy"
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:PutItem"
+        ]
+        Effect   = "Allow"
+        Resource = aws_dynamodb_table.cost_tracker.arn
       }
     ]
   })
@@ -227,12 +396,15 @@ resource "aws_lambda_function" "api" {
 
   environment {
     variables = {
-      CORS_ORIGINS     = var.use_custom_domain ? "https://${var.root_domain},https://www.${var.root_domain}" : "https://${aws_cloudfront_distribution.main.domain_name}"
-      S3_BUCKET        = aws_s3_bucket.memory.id
-      USE_S3           = "true"
-      BEDROCK_MODEL_ID = var.bedrock_model_id
-      GUARDRAIL_ID     = aws_bedrock_guardrail.main.guardrail_id
+      CORS_ORIGINS      = var.use_custom_domain ? "https://${var.root_domain},https://www.${var.root_domain}" : "https://${aws_cloudfront_distribution.main.domain_name}"
+      S3_BUCKET         = aws_s3_bucket.memory.id
+      USE_S3            = "true"
+      BEDROCK_MODEL_ID  = var.bedrock_model_id
+      GUARDRAIL_ID      = aws_bedrock_guardrail.main.guardrail_id
       GUARDRAIL_VERSION = aws_bedrock_guardrail_version.main.version
+      # Cost protection
+      COST_TABLE        = aws_dynamodb_table.cost_tracker.name
+      DAILY_BUDGET_USD  = tostring(var.daily_budget_usd)
     }
   }
 
