@@ -14,6 +14,31 @@
 #   - CloudFrontFullAccess
 #   - AWSCertificateManagerFullAccess
 #   - IAMReadOnlyAccess
+#   - AmazonSNSFullAccess          ← added 2026-06-12 (was missing SNS:TagResource)
+#   - AmazonDynamoDBFullAccess
+#   - AmazonS3FullAccess
+#   - AmazonBedrockFullAccess
+#   - AWSLambda_FullAccess
+#
+# Inline policy "github-actions-additional" covers:
+#   - IAM write actions (CreateRole, PutRolePolicy, PassRole …)
+#   - STS:GetCallerIdentity
+#   - AWS Budgets (incl. budgets:TagResource)  ← added 2026-06-12
+#   - CloudWatch Logs (CreateLogGroup, TagResource …)
+#
+# The full inline policy is in: iam_github_inline_policy.json
+# Apply with:
+#   aws iam put-role-policy \
+#     --role-name github-actions-twin-deploy \
+#     --policy-name github-actions-additional \
+#     --policy-document file://terraform/iam_github_inline_policy.json
+#
+# Attached managed policies (10/10 — AWS limit reached):
+#   - AmazonRoute53FullAccess
+#   - AmazonAPIGatewayAdministrator
+#   - CloudFrontFullAccess
+#   - AWSCertificateManagerFullAccess
+#   - IAMReadOnlyAccess
 #   - AmazonSNSFullAccess          ← added 2026-06-12
 #   - AmazonDynamoDBFullAccess
 #   - AmazonS3FullAccess
