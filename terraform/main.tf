@@ -177,7 +177,7 @@ resource "aws_iam_role_policy" "budget_breaker_policy" {
         # Allow killing the main API Lambda by setting concurrency to 0
         Action   = ["lambda:PutFunctionConcurrency", "lambda:GetFunctionConcurrency"]
         Effect   = "Allow"
-        Resource = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${local.name_prefix}-api"
+        Resource = "arn:aws:lambda:${data.aws_region.current.id}:${data.aws_caller_identity.current.account_id}:function:${local.name_prefix}-api"
       },
       {
         # Allow sending the shutdown notification
@@ -272,7 +272,7 @@ resource "aws_iam_role_policy" "lambda_bedrock_policy" {
           "bedrock:InvokeModel"
         ]
         Effect   = "Allow"
-        Resource = "arn:aws:bedrock:${data.aws_region.current.name}::foundation-model/amazon.nova-*"
+        Resource = "arn:aws:bedrock:${data.aws_region.current.id}::foundation-model/amazon.nova-*"
       },
       {
         Action = [
