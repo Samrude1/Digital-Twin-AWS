@@ -290,13 +290,23 @@ Hard filters enforced at the AWS infrastructure level — independent of the app
 - **Topic Blocking:** Denies Medical, Financial, and Legal advice requests
 - Both user inputs and AI outputs are filtered in real time
 
-### Layer 6 — Infrastructure Security
-- **Least Privilege IAM:** Lambda roles restricted to exact S3 buckets and Bedrock model ARNs
-- **OIDC Authentication:** GitHub Actions uses short-lived OIDC tokens — no long-lived AWS keys stored
-- **Input Validation:** All `session_id` values validated with strict regex to prevent path traversal
-- **Secret Management:** `.gitignore` blocks `.env`, `.pem`, `.tfstate`, and `terraform.tfvars`
+### Layer 6 — Infrastructure Security & HTTP Hardening
+- **HTTP Security Headers:** CloudFront distribution enforces AWS `Managed-SecurityHeadersPolicy` (HSTS `Strict-Transport-Security`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy: strict-origin-when-cross-origin`).
+- **Least Privilege IAM:** Lambda roles restricted to exact S3 buckets, DynamoDB tables, and Bedrock model ARNs.
+- **OIDC Authentication:** GitHub Actions uses short-lived OIDC tokens — no long-lived AWS keys stored.
+- **Input & Payload Validation:** Message lengths strictly bounded with Pydantic (`1..2000` chars) and `session_id` validated with regex `^[a-zA-Z0-9\-_]{1,64}$` to prevent path traversal and memory bloat.
+- **Sanitized Error Responses:** Generic client-facing error messages to prevent internal stack traces or AWS infrastructure details from leaking.
+- **Secret Management:** `.gitignore` blocks `.env`, `.pem`, `.tfstate`, and `terraform.tfvars`.
 
 ---
+
+## 🛡️ Security Audit
+
+The codebase is audited against production-readiness standards (`/security-audit`):
+- ✅ **Authentication & Abuse Defense**: Rate limiting (10/min, 100/hr) + Session limits (30 msgs, 50k tokens) + Budget Circuit Breaker.
+- ✅ **Data Protection**: Public access blocked on conversation memory S3 bucket, sanitized client error handling.
+- ✅ **Edge Protection**: CloudFront TLS 1.2+ HTTPS enforcement and Security Headers policy.
+- ✅ **Dependencies**: Automated vulnerability scanning and dependency patching via `npm audit` and `uv`.
 
 ## Bedrock Model Options
 

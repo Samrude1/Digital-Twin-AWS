@@ -2,6 +2,11 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
+# AWS Managed Security Headers policy for CloudFront
+data "aws_cloudfront_response_headers_policy" "security_headers" {
+  name = "Managed-SecurityHeadersPolicy"
+}
+
 locals {
   aliases = var.use_custom_domain && var.root_domain != "" ? [
     var.root_domain,
@@ -513,8 +518,9 @@ resource "aws_cloudfront_distribution" "main" {
       }
     }
 
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
+    viewer_protocol_policy     = "redirect-to-https"
+    response_headers_policy_id = data.aws_cloudfront_response_headers_policy.security_headers.id
+    min_ttl                    = 0
     default_ttl            = 3600
     max_ttl                = 86400
   }

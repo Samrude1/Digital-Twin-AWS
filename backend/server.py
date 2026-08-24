@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import os
 from dotenv import load_dotenv
 from typing import Optional, List, Dict
@@ -94,8 +94,8 @@ dynamodb = boto3.resource("dynamodb") if COST_TABLE else None
 # Request / Response Models
 # ─────────────────────────────────────────────
 class ChatRequest(BaseModel):
-    message: str
-    session_id: Optional[str] = None
+    message: str = Field(..., min_length=1, max_length=2000, description="User prompt message")
+    session_id: Optional[str] = Field(None, max_length=64, description="Optional conversation session ID")
 
 
 class ChatResponse(BaseModel):
@@ -323,7 +323,7 @@ def call_bedrock(conversation: List[Dict], user_message: str) -> str:
             raise HTTPException(status_code=429, detail="AI service is busy. Please retry in a moment.")
         else:
             print(f"Bedrock error: {e}")
-            raise HTTPException(status_code=500, detail=f"Bedrock error: {str(e)}")
+            raise HTTPException(status_code=500, detail="AI service encountered an internal error. Please try again later.")
 
 
 # ─────────────────────────────────────────────
@@ -403,7 +403,7 @@ async def chat(request: Request, body: ChatRequest):
         raise
     except Exception as e:
         print(f"Error in chat endpoint: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail="An error occurred while processing your request. Please try again later.")
 
 
 @app.get("/conversation/{session_id}")
@@ -418,7 +418,8 @@ async def get_conversation(session_id: str):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error in get_conversation endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="An error occurred while retrieving conversation history.")
 
 
 if __name__ == "__main__":
