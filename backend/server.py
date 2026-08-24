@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 import os
+import logging
 from dotenv import load_dotenv
 from typing import Optional, List, Dict
 import json
@@ -18,6 +19,10 @@ from context import prompt
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logger = logging.getLogger("digital_twin_api")
 
 # Load environment variables
 load_dotenv()
@@ -109,9 +114,16 @@ class Message(BaseModel):
     timestamp: str
 
 
-# ─────────────────────────────────────────────
-# Memory Management
-# ─────────────────────────────────────────────
+# Session ID validation helper
+SESSION_ID_PATTERN = re.compile(r"^[a-zA-Z0-9\-_]{1,64}$")
+
+
+def validate_session_id(session_id: Optional[str]) -> None:
+    """Validate session_id format to prevent path traversal."""
+    if session_id and not SESSION_ID_PATTERN.match(session_id):
+        raise HTTPException(status_code=400, detail="Invalid session_id format")
+
+
 def get_memory_path(session_id: str) -> str:
     return f"{session_id}.json"
 
@@ -212,8 +224,11 @@ def check_daily_budget():
         item = response.get("Item", {})
         current_cost = float(item.get("total_cost", 0))
         if current_cost >= DAILY_BUDGET_USD:
-            print(f"[CIRCUIT BREAKER] Daily budget ${DAILY_BUDGET_USD} exhausted. "
-                  f"Current: ${current_cost:.4f}")
+            logger.warning(
+                "[CIRCUIT BREAKER] Daily budget $%s exhausted. Current: $%s",
+                DAILY_BUDGET_USD,
+                f"{current_cost:.4f}",
+            )
             raise HTTPException(
                 status_code=503,
                 detail=(
@@ -225,7 +240,7 @@ def check_daily_budget():
         raise
     except Exception as e:
         # Never block real users due to DynamoDB issues — log and continue
-        print(f"[WARNING] Cost check failed (non-blocking): {e}")
+        logger.warning("[WARNING] Cost check failed (non-blocking): %s", e)
 
 
 def record_cost(tokens_used: int):
@@ -255,7 +270,7 @@ def record_cost(tokens_used: int):
         )
     except Exception as e:
         # Non-blocking — never crash real traffic over a metrics write
-        print(f"[WARNING] Cost recording failed (non-blocking): {e}")
+        logger.warning("[WARNING] Cost recording failed (non-blocking): %s", e)
 
 
 # ─────────────────────────────────────────────
@@ -313,16 +328,16 @@ def call_bedrock(conversation: List[Dict], user_message: str) -> str:
     except ClientError as e:
         error_code = e.response["Error"]["Code"]
         if error_code == "ValidationException":
-            print(f"Bedrock validation error: {e}")
+            logger.error("Bedrock validation error: %s", e)
             raise HTTPException(status_code=400, detail="Invalid message format for Bedrock")
         elif error_code == "AccessDeniedException":
-            print(f"Bedrock access denied: {e}")
+            logger.error("Bedrock access denied: %s", e)
             raise HTTPException(status_code=403, detail="Access denied to Bedrock model")
         elif error_code == "ThrottlingException":
-            print(f"Bedrock throttling: {e}")
+            logger.warning("Bedrock throttling: %s", e)
             raise HTTPException(status_code=429, detail="AI service is busy. Please retry in a moment.")
         else:
-            print(f"Bedrock error: {e}")
+            logger.error("Bedrock error: %s", e)
             raise HTTPException(status_code=500, detail="AI service encountered an internal error. Please try again later.")
 
 
@@ -366,9 +381,7 @@ async def chat(request: Request, body: ChatRequest):
     """
     try:
         # Validate session ID format to prevent path traversal
-        if body.session_id:
-            if not re.match(r"^[a-zA-Z0-9\-_]{1,64}$", body.session_id):
-                raise HTTPException(status_code=400, detail="Invalid session_id format")
+        validate_session_id(body.session_id)
 
         session_id = body.session_id or str(uuid.uuid4())
 
@@ -402,7 +415,7 @@ async def chat(request: Request, body: ChatRequest):
     except HTTPException:
         raise
     except Exception as e:
-        print(f"Error in chat endpoint: {str(e)}")
+        logger.error("Error in chat endpoint: %s", str(e), exc_info=True)
         raise HTTPException(status_code=500, detail="An error occurred while processing your request. Please try again later.")
 
 
@@ -410,15 +423,14 @@ async def chat(request: Request, body: ChatRequest):
 async def get_conversation(session_id: str):
     """Retrieve conversation history for a session."""
     try:
-        if not re.match(r"^[a-zA-Z0-9\-_]{1,64}$", session_id):
-            raise HTTPException(status_code=400, detail="Invalid session_id format")
+        validate_session_id(session_id)
 
         conversation = load_conversation(session_id)
         return {"session_id": session_id, "messages": conversation}
     except HTTPException:
         raise
     except Exception as e:
-        print(f"Error in get_conversation endpoint: {str(e)}")
+        logger.error("Error in get_conversation endpoint: %s", str(e), exc_info=True)
         raise HTTPException(status_code=500, detail="An error occurred while retrieving conversation history.")
 
 

@@ -2,8 +2,8 @@ from resources import linkedin, summary, facts, style
 from datetime import datetime
 
 
-full_name = facts["full_name"]
-name = facts["name"]
+full_name = facts.get("full_name", "Sami Rautanen")
+name = facts.get("name", "Sami")
 
 
 def prompt():

@@ -49,43 +49,43 @@ AWS Budgets (monthly limit)
 ## Tech Stack
 
 ### Backend
-| Layer | Technology |
-|---|---|
-| Runtime | Python 3.12 |
-| Framework | FastAPI + Mangum (Lambda adapter) |
-| AI Model | AWS Bedrock — Amazon Nova (Lite / Micro / Pro) |
-| Memory | AWS S3 (session-scoped JSON files) |
-| Rate Limiting | `slowapi` (per-IP: 10/min, 100/hr) |
-| Packaging | `uv` + Docker (Lambda-compatible build) |
+| Layer         | Technology                                     |
+| ------------- | ---------------------------------------------- |
+| Runtime       | Python 3.12                                    |
+| Framework     | FastAPI + Mangum (Lambda adapter)              |
+| AI Model      | AWS Bedrock — Amazon Nova (Lite / Micro / Pro) |
+| Memory        | AWS S3 (session-scoped JSON files)             |
+| Rate Limiting | `slowapi` (per-IP: 10/min, 100/hr)             |
+| Packaging     | `uv` + Docker (Lambda-compatible build)        |
 
 ### Frontend
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 15 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS v4 |
-| Export | Static (`output: 'export'`) |
+| Layer     | Technology                  |
+| --------- | --------------------------- |
+| Framework | Next.js 15 (App Router)     |
+| Language  | TypeScript                  |
+| Styling   | Tailwind CSS v4             |
+| Export    | Static (`output: 'export'`) |
 
 ### AWS Infrastructure
-| Service | Purpose |
-|---|---|
-| Lambda | Serverless Python backend |
-| API Gateway (HTTP) | REST API routing + throttling |
-| S3 (×2) | Frontend hosting + conversation memory |
-| CloudFront | Global CDN + HTTPS |
-| Bedrock | Managed AI model inference |
-| Bedrock Guardrails | 🛡️ AI safety & content filtering |
-| DynamoDB | Daily cost tracking (circuit breaker) |
-| SNS | Budget alert notifications |
-| AWS Budgets | Monthly spend limit + auto-shutdown trigger |
+| Service            | Purpose                                     |
+| ------------------ | ------------------------------------------- |
+| Lambda             | Serverless Python backend                   |
+| API Gateway (HTTP) | REST API routing + throttling               |
+| S3 (×2)            | Frontend hosting + conversation memory      |
+| CloudFront         | Global CDN + HTTPS                          |
+| Bedrock            | Managed AI model inference                  |
+| Bedrock Guardrails | 🛡️ AI safety & content filtering             |
+| DynamoDB           | Daily cost tracking (circuit breaker)       |
+| SNS                | Budget alert notifications                  |
+| AWS Budgets        | Monthly spend limit + auto-shutdown trigger |
 
 ### DevOps
-| Tool | Purpose |
-|---|---|
-| Terraform | Infrastructure as Code (IaC) |
+| Tool           | Purpose                                       |
+| -------------- | --------------------------------------------- |
+| Terraform      | Infrastructure as Code (IaC)                  |
 | GitHub Actions | CI/CD pipelines — push to `main` auto-deploys |
-| AWS OIDC | Keyless authentication for GitHub Actions |
-| S3 Backend | Remote Terraform state management |
+| AWS OIDC       | Keyless authentication for GitHub Actions     |
+| S3 Backend     | Remote Terraform state management             |
 
 ---
 
@@ -137,14 +137,14 @@ digital-twin/
 
 ## Build Phases
 
-| Phase | Focus | Key Outcome |
-|---|---|---|
-| **1** | Local prototype | FastAPI + Next.js + file-based memory |
-| **2** | AWS deployment | Lambda, API Gateway, S3, CloudFront |
-| **3** | AWS Bedrock | Amazon Nova models replacing OpenAI |
-| **4** | Terraform IaC | Dev / Test / Prod environments automated |
-| **5** | GitHub Actions CI/CD | Push-to-deploy + OIDC authentication |
-| **6** | 🛡️ AI Guardrails | Hard safety filters via Bedrock Guardrails |
+| Phase | Focus                   | Key Outcome                                                 |
+| ----- | ----------------------- | ----------------------------------------------------------- |
+| **1** | Local prototype         | FastAPI + Next.js + file-based memory                       |
+| **2** | AWS deployment          | Lambda, API Gateway, S3, CloudFront                         |
+| **3** | AWS Bedrock             | Amazon Nova models replacing OpenAI                         |
+| **4** | Terraform IaC           | Dev / Test / Prod environments automated                    |
+| **5** | GitHub Actions CI/CD    | Push-to-deploy + OIDC authentication                        |
+| **6** | 🛡️ AI Guardrails         | Hard safety filters via Bedrock Guardrails                  |
 | **7** | 🔐 Cost & Bot Protection | Three-layer defence against runaway bots and surprise bills |
 
 ---
@@ -310,11 +310,11 @@ The codebase is audited against production-readiness standards (`/security-audit
 
 ## Bedrock Model Options
 
-| Model ID | Speed | Cost | Best for |
-|---|---|---|---|
-| `amazon.nova-micro-v1:0` | Fastest | Lowest | Simple Q&A, greetings ✅ (default) |
-| `amazon.nova-lite-v1:0` | Balanced | Medium | General conversations |
-| `amazon.nova-pro-v1:0` | Slowest | Highest | Complex reasoning |
+| Model ID                 | Speed    | Cost    | Best for                          |
+| ------------------------ | -------- | ------- | --------------------------------- |
+| `amazon.nova-micro-v1:0` | Fastest  | Lowest  | Simple Q&A, greetings ✅ (default) |
+| `amazon.nova-lite-v1:0`  | Balanced | Medium  | General conversations             |
+| `amazon.nova-pro-v1:0`   | Slowest  | Highest | Complex reasoning                 |
 
 > **Note:** In some regions you may need a prefix: `eu.amazon.nova-lite-v1:0` or `us.amazon.nova-lite-v1:0`
 
@@ -337,15 +337,15 @@ To deploy manually: GitHub → Actions → Deploy Digital Twin → Run workflow.
 
 ## Cost Estimate
 
-| Service | Est. monthly cost |
-|---|---|
-| Lambda (1M invocations) | ~$0.20 |
-| API Gateway | ~$1.00 per 1M requests |
-| Bedrock Nova Micro | ~$0.035 per 1M input tokens |
-| S3 (storage + requests) | < $0.10 |
-| CloudFront | < $0.10 |
-| DynamoDB (on-demand) | < $0.01 |
-| SNS | Free tier covers typical usage |
+| Service                 | Est. monthly cost              |
+| ----------------------- | ------------------------------ |
+| Lambda (1M invocations) | ~$0.20                         |
+| API Gateway             | ~$1.00 per 1M requests         |
+| Bedrock Nova Micro      | ~$0.035 per 1M input tokens    |
+| S3 (storage + requests) | < $0.10                        |
+| CloudFront              | < $0.10                        |
+| DynamoDB (on-demand)    | < $0.01                        |
+| SNS                     | Free tier covers typical usage |
 
 **Monthly budget guard: $20 hard limit** (configurable in `terraform.tfvars`).
 
